@@ -8,6 +8,7 @@
                  [metrics-clojure "2.4.0"]
                  [metrics-clojure-graphite "2.4.0"]
                  [metrics-clojure-ring "2.4.0"]
+                 [clj-http "1.0.1"]
                  ;;[com.lgi.epg.api/customer-api-adapter-client "1.0-SNAPSHOT"]
                  ]
   :plugins [[lein-ring "0.8.13"]]
