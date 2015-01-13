@@ -7,7 +7,8 @@
                  [ring/ring-defaults "0.1.2"]
                  [metrics-clojure "2.4.0"]
                  [metrics-clojure-graphite "2.4.0"]
-                 [metrics-clojure-ring "2.4.0"]]
+                 [metrics-clojure-ring "2.4.0"]
+                 [com.lgi.epg.api/customer-api-adapter-client "1.0-SNAPSHOT"]]
   :plugins [[lein-ring "0.8.13"]]
   :ring {:handler clogrid.core.handler/app}
   :profiles
