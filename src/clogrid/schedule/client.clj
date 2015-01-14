@@ -3,6 +3,8 @@
             [clojure.data.json :as json]))
 
 (def lgi-io "http://api.lgi.io/kraken/v2/schedule/data/")
+(def channels "/channels.json")
+(def broadcasts "/broadcasts.json")
 
 
 
@@ -13,4 +15,11 @@
                :content-type :json}))
 
 (defn channels [region]
-  (client/get (str lgi-io region "/channels.json")))
+  (client/get (str lgi-io region channels)))
+
+(defn broadcast [region broadcast-id]
+  (client/get (str lgi-io region broadcasts)
+              {:query-params {"fields" (str "id," broadcast-id)}}))
+
+(defn broadcasts [region]
+  (client/get (str lgi-io region broadcasts)))
