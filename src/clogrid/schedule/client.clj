@@ -3,8 +3,7 @@
             [clojure.data.json :as json]))
 
 (def lgi-io "http://api.lgi.io/kraken/v2/schedule/data/")
-(def channels "/channels.json")
-(def broadcasts "/broadcasts.json")
+(def channelsEndpoint "/channels.json")
 
 
 
@@ -14,12 +13,13 @@
                               "fields" "ref,name"}
                :content-type :json}))
 
-(defn channels [region]
-  (client/get (str lgi-io region channels)))
+(defn getChannel [region channel-id]
+  (let [response (client/get (str lgi-io region "/channels.json")
+                            {:query-params {"ref"    channel-id
+                                            "fields" "ref,name"}
+                             :content-type :json})] 
+	(fixContentLength response)))
 
-(defn broadcast [region broadcast-id]
-  (client/get (str lgi-io region broadcasts)
-              {:query-params {"fields" (str "id," broadcast-id)}}))
-
-(defn broadcasts [region]
-  (client/get (str lgi-io region broadcasts)))
+(defn getChannels [region]
+(let [response (client/get (str lgi-io region channelsEndpoint))]
+	(fixContentLength response)))

@@ -7,9 +7,12 @@
             [metrics.ring.instrument :refer [instrument]]
             [clogrid.schedule.client :as schedule]))
 
+(defn channel-info [region channel]
+  (schedule/channel region channel))
+
 (defroutes app-routes
-           (GET "/:region/channels.json" [region] (str "Cruel " region "!"))
-           (GET "/:region/:channel.json" [region channel] (schedule/channel region channel))
+           (GET "/:region/channels.json" [region] (schedule/getChannels region))
+           (GET "/:region/:channel.json" [region channel] (schedule/getChannel region channel))
            (route/not-found "Not Found"))
 
 (def app
