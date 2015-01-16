@@ -14,12 +14,12 @@
                :content-type :json}))
 
 (defn getChannel [region channel-id]
-  (let [response (client/get (str lgi-io region "/channels.json")
+  (let [response (client/get (str lgi-io region channelsEndpoint)
                             {:query-params {"ref"    channel-id
                                             "fields" "ref,name"}
                              :content-type :json})] 
-	(fixContentLength response)))
+	(response :body)))
 
 (defn getChannels [region]
 (let [response (client/get (str lgi-io region channelsEndpoint))]
-	(fixContentLength response)))
+	(response :body)))
