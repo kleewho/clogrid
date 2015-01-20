@@ -8,19 +8,25 @@
             [metrics.ring.expose :refer [expose-metrics-as-json]]
             [metrics.ring.instrument :refer [instrument]]
             [metrics.reporters.graphite :as graphite]
+            [metrics.reporters.console :as console]
             [clogrid.schedule.client :as schedule]
             [clogrid.core.grid :as grid]
             [clojure.data.json :as json])
   (:import (com.codahale.metrics MetricFilter)
            (java.util.concurrent TimeUnit)))
 
-(def GR (graphite/reporter {:host "localhost"
+(def GR (graphite/reporter {:host "127.0.0.1"
+                            :hostname "127.0.0.1"
                             :port 2003
                             :prefix "my-api.common.prefix"
                             :rate-unit TimeUnit/SECONDS
                             :duration-unit TimeUnit/MILLISECONDS
                             :filter MetricFilter/ALL}))
 (graphite/start GR 1)
+
+
+(def CR (console/reporter {}))
+(console/start CR 10)
 
 (defn channel-info [region channel]
   (schedule/get-channel region channel))
