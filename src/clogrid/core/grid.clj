@@ -1,10 +1,10 @@
 (ns clogrid.core.grid
-  (:require [clogrid.schedule.client :as schedule]
-            ))
-
+  (:require [clogrid.schedule.client :as schedule]))
 
 (defn decorate-with-ref [fields]
-  (if (nil? fields) "ref" (clojure.string/join "," (conj (set (clojure.string/split fields #",")) "ref"))))
+  (if (nil? fields)
+    "ref"
+    (clojure.string/join "," (conj (set (clojure.string/split fields #",")) "ref"))))
 
 (defn get-channels-with-ref [region {fields  "fields" :as query-params}]
   (let
