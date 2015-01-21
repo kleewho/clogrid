@@ -14,8 +14,7 @@ To show all upsides and downsides we should show:
 
 * how to use our java libraries that we already written (eg. customer-api-adapter-client)
 * try to embrace the clojure way (it's better to use simple types instead of creating classes and stuff)
-* how to send metrics to graphite
+* how to send metrics to graphite :+1:
 * how to write simple clients of our api in clojure (eg. schedule-client)
 * how to write and run tests
 * how much different (worse) is work with clojure in IDEA
-
