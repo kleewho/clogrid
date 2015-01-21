@@ -16,10 +16,10 @@
 (defn get-channels [region query-params]
   (let [response (client/get
                    (str lgi-io region channels-endpoint) {:query-params query-params})]
-    (json/read-str (response :body))))
+    (json/read-str (response :body) :key-fn keyword)))
 
 (defn get-broadcasts [region query-params]
   (let [response (client/get
                    (str lgi-io region broadcasts-endpoint) {:query-params query-params})]
-    (json/read-str (response :body))))
+    (json/read-str (response :body) :key-fn keyword)))
 
