@@ -18,3 +18,4 @@ To show all upsides and downsides we should show:
 * how to write simple clients of our api in clojure (eg. schedule-client)
 * how to write and run tests
 * how much different (worse) is work with clojure in IDEA
+* add some exception/error handling
