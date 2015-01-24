@@ -7,13 +7,15 @@
     "ref"
     (clojure.string/join "," (conj (set (clojure.string/split fields #",")) "ref"))))
 
+(defn as503 [f] (println (str f "bla bla")) 503)
+
 (defn get-channels-monadic-fuck-yes [region {fields  "fields" :as query-params}]
   (error/attempt-all [fields-with-ref (decorate-with-ref fields)
                       query-params-with-fields (conj query-params {"fields" fields-with-ref})
                       channels-resp (schedule/get-channels region query-params-with-fields)
                       channels (channels-resp :data)]
                      channels
-                     503))
+                     as503))
 
 (defn get-channels-with-ref [region {fields  "fields" :as query-params}]
   (let

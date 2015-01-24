@@ -24,7 +24,7 @@
 (defn- try-apply [f & args]
   (try
     (apply f args)
-    (catch Exception e fail (.getMessage e))))
+    (catch Exception e (fail (.getMessage e)))))
 
 (defmonad error-m
           [m-result identity
@@ -37,6 +37,6 @@
   ([bindings return else]
      `(let [result# (attempt-all ~bindings ~return)]
         (if (has-failed? result#)
-          ~else
+          (~else result#)
           result#))))
 
