@@ -2,7 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.data.json :as json]))
 
-(def lgi-io "http://api.lgi.iodaa/kraken/v2/schedule/data/")
+(def lgi-io "http://api.lgi.io/kraken/v2/schedule/data/")
 (def channels-endpoint "/channels.json")
 (def broadcasts-endpoint "/broadcasts.json")
 
