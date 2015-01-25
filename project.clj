@@ -11,7 +11,9 @@
                  [clj-http "1.0.1"]
                  [com.lgi.epg.api/customer-api-adapter-client "1.0"]
                  [org.clojure/data.json "0.2.5"]
-                 ]
+                 [org.clojure/algo.monads "0.1.5"]
+                 [org.clojure/tools.logging "0.3.1"]
+                 [ch.qos.logback/logback-classic "1.1.1"]]
   :plugins [[lein-ring "0.8.13"]]
   :ring {:handler clogrid.core.handler/app}
   :profiles

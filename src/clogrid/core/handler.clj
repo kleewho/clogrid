@@ -10,7 +10,8 @@
             [metrics.reporters.graphite :as graphite]
             [clogrid.schedule.client :as schedule]
             [clogrid.core.grid :as grid]
-            [clojure.data.json :as json])
+            [clojure.data.json :as json]
+            [clojure.tools.logging :as log])
   (:import (java.util.concurrent TimeUnit)
            (com.codahale.metrics MetricFilter)))
 
@@ -30,9 +31,21 @@
            (route/not-found "Not Found"))
 
 (def app
-  (->
-    (routes app-routes)
-    (api)
-    (wrap-base-url)
-    (instrument)
-    (expose-metrics-as-json)))
+  (do
+    (log/info "
+Hi man.
+
+This is POC implementation of GRID made in clojure.
+The main question is:
+how much CLOC will change?
+Will it be 2x, 10x, 20x?
+
+The authors wish you happy hacking. Wax on, wax off
+Lukasz & Patryk
+")
+    (->
+     (routes app-routes)
+     (api)
+     (wrap-base-url)
+     (instrument)
+     (expose-metrics-as-json))))
