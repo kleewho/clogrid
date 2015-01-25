@@ -1,21 +1,20 @@
 (ns clogrid.core.grid
-  (:require [clogrid.schedule.client :as schedule]
-            [clogrid.core.error :as error]))
+  (:require [clogrid.core.error :as error]
+            [clogrid.core.error-helpers :refer [log-as return-as]]
+            [clogrid.schedule.client :as schedule]))
 
 (defn decorate-with-ref [fields]
   (if (nil? fields)
     "ref"
     (clojure.string/join "," (conj (set (clojure.string/split fields #",")) "ref"))))
 
-(defn return-as-503 [arg] (println (str arg "bla bla")) 503)
-
-(defn get-channels-monadic-fuck-yes [region {fields  "fields" :as query-params}]
+(defn get-channels-with-error-handling [region {fields  "fields" :as query-params}]
   (error/attempt-all [fields-with-ref (decorate-with-ref fields)
                       query-params-with-fields (conj query-params {"fields" fields-with-ref})
                       channels-resp (schedule/get-channels region query-params-with-fields)
                       channels (channels-resp :data)]
                      channels
-                     return-as-503))
+                     (log-as :error (return-as 503))))
 
 (defn get-channels-with-ref [region {fields  "fields" :as query-params}]
   (let
