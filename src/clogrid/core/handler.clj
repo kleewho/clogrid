@@ -38,7 +38,7 @@ Hi man.
 This is POC implementation of GRID made in clojure.
 The main question is:
 how much CLOC will change?
-Will it be 2x, 10x, 20x?
+Will it be x0.5, x0.1, x0.05?
 
 The authors wish you happy hacking. Wax on, wax off
 Lukasz & Patryk
