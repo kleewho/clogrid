@@ -6,10 +6,17 @@
 (def channels-endpoint "/channels.json")
 (def broadcasts-endpoint "/broadcasts.json")
 
+(defn get-channel [region channel-id]
+  (let [response (client/get (str lgi-io region channels-endpoint)
+                             {:query-params {"ref"    channel-id
+                                             "fields" "ref,name"}
+                              :content-type :json})]
+    (response :body)))
+
 (defn get-schedule-data [region endpoint query-params]
   (let [response (client/get
                    (str lgi-io region endpoint) {:query-params query-params})]
-    (json/read-str (response :body) :key-fn keyword)))
+    (:data (json/read-str (response :body) :key-fn keyword))))
 
 (defn get-channels [region query-params]
   (get-schedule-data region channels-endpoint query-params))
