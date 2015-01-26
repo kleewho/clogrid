@@ -21,9 +21,6 @@
                             :filter MetricFilter/ALL}))
 (graphite/start GR 1)
 
-(defn channel-info [region channel]
-  (schedule/get-channel region channel))
-
 (defroutes app-routes
            (GET "/:region/channels.json" [region :as {query-params :query-params}]
                 (json/write-str (grid/get-channels-with-broadcasts region query-params)))

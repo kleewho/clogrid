@@ -8,13 +8,14 @@
     "ref"
     (clojure.string/join "," (conj (set (clojure.string/split fields #",")) "ref"))))
 
-(defn get-channels-with-error-handling [region {fields  "fields" :as query-params}]
-  (error/attempt-all [fields-with-ref (decorate-with-ref fields)
-                      query-params-with-fields (conj query-params {"fields" fields-with-ref})
-                      channels-resp (schedule/get-channels region query-params-with-fields)
-                      channels (channels-resp :data)]
-                     channels
-                     (log-as :error (return-as 503))))
+(defn get-channels-with-error-handling [region query-params]
+  (let [{fields  "fields"} query-params]
+      (error/attempt-all [fields-with-ref (decorate-with-ref fields)
+                          query-params-with-fields (conj query-params {"fields" fields-with-ref})
+                          channels-resp (schedule/get-channels region query-params-with-fields)
+                          channels (channels-resp :data)]
+                         channels
+                         (log-as :error (return-as 503)))))
 
 (defn get-channels-with-ref [region {fields  "fields" :as query-params}]
   (let

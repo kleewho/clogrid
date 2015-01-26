@@ -6,15 +6,6 @@
 (def channels-endpoint "/channels.json")
 (def broadcasts-endpoint "/broadcasts.json")
 
-; this one seems to be not used - and besides it uses wrong endpoint
-; TODO: fix or remove this function
-(defn get-channel [region channel-id]
-  (let [response (client/get (str lgi-io region broadcasts-endpoint)
-                             {:query-params {"ref"    channel-id
-                                             "fields" "ref,name"}
-                              :content-type :json})]
-    (response :body)))
-
 (defn get-schedule-data [region endpoint query-params]
   (let [response (client/get
                    (str lgi-io region endpoint) {:query-params query-params})]
