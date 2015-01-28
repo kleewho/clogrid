@@ -1,10 +1,7 @@
 (ns clogrid.core.handler
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
-            [compojure.handler :refer [api]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
-            [ring.middleware.params :refer [wrap-params]]
-            [hiccup.middleware :refer [wrap-base-url]]
             [metrics.ring.expose :refer [expose-metrics-as-json]]
             [metrics.ring.instrument :refer [instrument]]
             [metrics.reporters.graphite :as graphite]
@@ -24,7 +21,10 @@
 
 (defroutes app-routes
   (GET "/:region/grid.json" [region :as request]
-       (json/write-str (grid/get-grid region (request :params) (request :broadcasts-fields))))
+       (json/write-str (grid/get-grid region
+                                      (request :params)
+                                      (request :broadcasts-fields)
+                                      (request :channels-fields))))
   (GET "/:region/:channel.json" [region channel] (schedule/get-channel region channel))
   (route/not-found "Not Found"))
 
