@@ -32,7 +32,7 @@
         (handler (assoc request :broadcasts-fields broadcasts-fields)))
       (handler request))))
 
-(defn wrap-lgi-defaults [handler]
+(defn wrap-grid-defaults [handler]
   (-> handler
       wrap-broadcasts-fields
       wrap-flat-multiple-params))

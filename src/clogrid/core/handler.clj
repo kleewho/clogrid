@@ -10,7 +10,7 @@
             [metrics.reporters.graphite :as graphite]
             [clogrid.schedule.client :as schedule]
             [clogrid.core.grid :as grid]
-            [clogrid.core.params :refer [wrap-lgi-defaults]]
+            [clogrid.core.params :refer [wrap-grid-defaults]]
             [clojure.data.json :as json]
             [clojure.tools.logging :as log])
   (:import (java.util.concurrent TimeUnit)
@@ -43,7 +43,7 @@ Lukasz & Patryk
 ")
     (->
      (routes app-routes)
-     (wrap-lgi-defaults)
+     (wrap-grid-defaults)
      (wrap-defaults api-defaults)
      (expose-metrics-as-json)
      (instrument))))

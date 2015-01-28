@@ -39,5 +39,5 @@
 
 
 (deftest test-middleware-is-in-correct-order
-  (let [result ((wrap-lgi-defaults identity) {:params {:fields ["a,broadcasts.b" "c,d" "broadcasts.e"]}})]
+  (let [result ((wrap-grid-defaults identity) {:params {:fields ["a,broadcasts.b" "c,d" "broadcasts.e"]}})]
     (is (= (result :broadcasts-fields) "b,e"))))
