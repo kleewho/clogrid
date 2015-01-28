@@ -17,22 +17,29 @@
 (defn- is-broadcasts-field? [field]
   (.contains field "broadcasts"))
 
-(defn- get-broadcasts-fields [fields]
+(defn- get-fields [fields selector]
   (->>
    (clojure.string/split fields #",")
-   (filter is-broadcasts-field?)
-   (map (fn [f] (clojure.string/replace-first f #"broadcasts." "")))
+   (selector)
    (clojure.string/join ",")
    (not-empty)))
 
-(defn wrap-broadcasts-fields [handler]
+(defn- broadcasts-fields-selector [fields]
+  (map #(clojure.string/replace-first % #"broadcasts." "")
+       (filter is-broadcasts-field? fields)))
+
+(defn- channels-fields-selector [fields]
+  (filter (comp not is-broadcasts-field?) fields))
+
+(defn wrap-fields [handler fields-selector fields-name]
   (fn [request]
     (if-let [fields (-> request :params :fields)]
-      (let [broadcasts-fields (get-broadcasts-fields fields)]
-        (handler (assoc request :broadcasts-fields broadcasts-fields)))
+      (let [selected-fields (get-fields fields fields-selector)]
+        (handler (assoc request fields-name selected-fields)))
       (handler request))))
 
 (defn wrap-grid-defaults [handler]
   (-> handler
-      wrap-broadcasts-fields
+      (wrap-fields broadcasts-fields-selector :broadcasts-fields)
+      (wrap-fields channels-fields-selector :channels-fields)
       wrap-flat-multiple-params))

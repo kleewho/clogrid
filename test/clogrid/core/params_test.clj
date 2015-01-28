@@ -37,7 +37,27 @@
     (let [result ((wrap-broadcasts-fields identity) {:params {:fields "broadcasts.b,broadcasts.c"}})]
       (is (= (result :broadcasts-fields) "b,c")))))
 
+(deftest test-channels-fields
+
+  (testing "no fields"
+    (let [result ((wrap-channels-fields identity) {:params {}})]
+      (is (= (result :channels-fields) nil))))
+
+  (testing "params with only channels fields"
+    (let [result ((wrap-channels-fields identity) {:params {:fields "a,b"}})]
+      (is (= (result :channels-fields) "a,b"))))
+
+  (testing "params with one channels field"
+    (let [result ((wrap-channels-fields identity) {:params {:fields "a,broadcasts.b"}})]
+      (is (= (result :channels-fields) "a"))))
+
+  (testing "params without channels fields"
+    (let [result ((wrap-channels-fields identity) {:params {:fields "broadcasts.b,broadcasts.c"}})]
+      (is (= (result :channels-fields) nil)))))
+
+
 
 (deftest test-middleware-is-in-correct-order
   (let [result ((wrap-grid-defaults identity) {:params {:fields ["a,broadcasts.b" "c,d" "broadcasts.e"]}})]
+    (is (= (result :channels-fields) "a,c,d"))
     (is (= (result :broadcasts-fields) "b,e"))))
