@@ -56,8 +56,7 @@
 (defn get-grid [region query-params bcasts-fields channels-fields]
   (error/attempt-all
    [channels (get-channels region query-params channels-fields)
-    channels-refs (retrieve-refs channels)
-    broadcasts (get-broadcasts region (conj query-params {:channel.ref channels-refs}) bcasts-fields)
+    broadcasts (get-broadcasts region query-params)
     grid (merge-channels-with-broadcasts channels broadcasts)]
    grid
    (log-as :error (return-as 503))))
