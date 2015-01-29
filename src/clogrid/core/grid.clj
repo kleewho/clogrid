@@ -34,7 +34,7 @@
                     {:fields fields-with-ref}
                     {:limit 32000}))
     channels]
-   (log-as :error identity)))
+   (log-as :error)))
 
 (defn- get-broadcasts [region query-params fields]
   (error/attempt-all
@@ -51,7 +51,7 @@
                             (str-date (t/minus (t/now) (t/hours 1))))
                  :sort "start"})]
    broadcasts
-   (log-as :error identity)))
+   (log-as :error)))
 
 (defn get-grid [region query-params bcasts-fields channels-fields]
   (error/attempt-all
