@@ -1,7 +1,15 @@
 (ns clogrid.core.grid
-  (:require [clogrid.core.error :as error]
+  (:require [clj-time.core :as t]
+            [clj-time.format :as f]
+            [clogrid.core.error :as error]
             [clogrid.core.error-helpers :refer [log-as return-as]]
-            [clogrid.schedule.client :as schedule]))
+            [clogrid.schedule.client :as schedule]
+            [clojure.string :as str]))
+
+(def formatter (f/formatters :date-time-no-ms))
+
+(defn- str-date [date]
+  (f/unparse formatter date))
 
 (defn- add-to-fields [fields field]
   (if (nil? fields)
@@ -24,20 +32,26 @@
               region
               (conj query-params
                     {:fields fields-with-ref}
-                    {:limit 32000}))]
-   channels
-   (log-as :error)))
+                    {:limit 32000}))
+    channels]
+   (log-as :error identity)))
 
 (defn- get-broadcasts [region query-params fields]
   (error/attempt-all
    [fields-with-channel-ref (add-to-fields fields "channel.ref")
     broadcasts (schedule/get-broadcasts
                 region
-                (conj query-params
-                      {:fields fields-with-channel-ref}
-                      {:limit 32000}))]
+                {:fields fields-with-channel-ref
+                 :limit 32000
+                 :start< (get query-params
+                              :end
+                              (str-date (t/plus (t/now) (t/hours 6))))
+                 :end> (get query-params
+                            :start
+                            (str-date (t/minus (t/now) (t/hours 1))))
+                 :sort "start"})]
    broadcasts
-   (log-as :error)))
+   (log-as :error identity)))
 
 (defn get-grid [region query-params bcasts-fields channels-fields]
   (error/attempt-all

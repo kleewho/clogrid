@@ -9,6 +9,7 @@
                  [metrics-clojure-graphite "2.4.0"]
                  [metrics-clojure-ring "2.4.0"]
                  [clj-http "1.0.1"]
+                 [clj-time "0.9.0"]
                  ;; [com.lgi.epg.api/customer-api-adapter-client "1.0"]
                  [org.clojure/data.json "0.2.5"]
                  [org.clojure/algo.monads "0.1.5"]
@@ -16,7 +17,8 @@
                  [ch.qos.logback/logback-classic "1.1.1"]
                  [net.logstash.logback/logstash-logback-encoder "3.6"]]
   :plugins [[lein-ring "0.9.1"]]
-  :ring {:handler clogrid.core.handler/app}
+  :ring {:handler clogrid.core.handler/app
+         :init clogrid.core.handler/init}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring-mock "0.1.5"]]}})

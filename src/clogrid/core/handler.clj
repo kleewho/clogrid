@@ -28,9 +28,8 @@
   (GET "/:region/:channel.json" [region channel] (schedule/get-channel region channel))
   (route/not-found "Not Found"))
 
-(def app
-  (do
-    (log/info "
+(defn init []
+  (log/info "
 Hi man.
 
 This is POC implementation of GRID made in clojure.
@@ -40,10 +39,12 @@ Will it be x0.5, x0.1, x0.05?
 
 The authors wish you happy hacking. Wax on, wax off
 Lukasz & Patryk
-")
-    (->
-     (routes app-routes)
-     (wrap-grid-defaults)
-     (wrap-defaults api-defaults)
-     (expose-metrics-as-json)
-     (instrument))))
+"))
+
+(def app
+  (->
+   (routes app-routes)
+   (wrap-grid-defaults)
+   (wrap-defaults api-defaults)
+   (expose-metrics-as-json)
+   (instrument)))
