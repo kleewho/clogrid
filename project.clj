@@ -15,7 +15,7 @@
                  [org.clojure/tools.logging "0.3.1"]
                  [ch.qos.logback/logback-classic "1.1.1"]
                  [net.logstash.logback/logstash-logback-encoder "3.6"]]
-  :plugins [[lein-ring "0.8.13"]]
+  :plugins [[lein-ring "0.9.1"]]
   :ring {:handler clogrid.core.handler/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
