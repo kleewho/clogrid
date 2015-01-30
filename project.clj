@@ -19,6 +19,17 @@
   :plugins [[lein-ring "0.9.1"]]
   :ring {:handler clogrid.core.handler/app
          :init clogrid.core.handler/init}
+  :lis-opts
+  {:pid-dir "/var/local/run"
+   :install-dir "/var/local/clogrid"
+   :init-script-install-dir "/etc/init.d"
+   :jar-install-dir "/var/local/clogrid"
+   :redirect-output-to "/var/local/clogrid/log"
+   :jar-args ["-p" "8080"]
+   :jvm-opts ["-server"
+              "-Xms256M"
+              "-Xmx512M"
+              "-XX:MaxPermSize=128M"]}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring-mock "0.1.5"]]}})

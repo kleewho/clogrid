@@ -19,45 +19,25 @@
           result ((wrap-flat-multiple-params identity) request)]
       (is (= (-> result :params :b) "b,c,d,e")))))
 
-(deftest test-broadcasts-fields
+(deftest test-get-params
 
-  (testing "no fields"
-    (let [result ((wrap-broadcasts-fields identity) {:params {}})]
-      (is (= (result :broadcasts-fields) nil))))
+  (testing "just simple operations on params"
+    (let [result (get-params {:a "a" :b "b" :c "c"} {:a identity :b (fn [x] (str x "2"))})]
+      (is (= result {:a "a" :b "b2"}))))
 
-  (testing "params without broadcasts fields"
-    (let [result ((wrap-broadcasts-fields identity) {:params {:fields "a,b"}})]
-      (is (= (result :broadcasts-fields) nil))))
-
-  (testing "params with one broadcasts field"
-    (let [result ((wrap-broadcasts-fields identity) {:params {:fields "a,broadcasts.b"}})]
-      (is (= (result :broadcasts-fields) "b"))))
-
-  (testing "params with only broadcasts fields"
-    (let [result ((wrap-broadcasts-fields identity) {:params {:fields "broadcasts.b,broadcasts.c"}})]
-      (is (= (result :broadcasts-fields) "b,c")))))
-
-(deftest test-channels-fields
-
-  (testing "no fields"
-    (let [result ((wrap-channels-fields identity) {:params {}})]
-      (is (= (result :channels-fields) nil))))
-
-  (testing "params with only channels fields"
-    (let [result ((wrap-channels-fields identity) {:params {:fields "a,b"}})]
-      (is (= (result :channels-fields) "a,b"))))
-
-  (testing "params with one channels field"
-    (let [result ((wrap-channels-fields identity) {:params {:fields "a,broadcasts.b"}})]
-      (is (= (result :channels-fields) "a"))))
-
-  (testing "params without channels fields"
-    (let [result ((wrap-channels-fields identity) {:params {:fields "broadcasts.b,broadcasts.c"}})]
-      (is (= (result :channels-fields) nil)))))
-
-
+  (testing "broadcasts params selector tested"
+    (let [result (get-params {:fields "broadcasts.b,broadcasts.c,d,e"
+                              :start "someDate"} broadcasts-params)]
+      (is (= result {:fields "b,c" :start "someDate"})))))
 
 (deftest test-middleware-is-in-correct-order
+
   (let [result ((wrap-grid-defaults identity) {:params {:fields ["a,broadcasts.b" "c,d" "broadcasts.e"]}})]
-    (is (= (result :channels-fields) "a,c,d"))
-    (is (= (result :broadcasts-fields) "b,e"))))
+    (is (= (-> result :channels-params :fields) "a,c,d"))
+    (is (= (-> result :broadcasts-params :fields) "b,e")))
+
+  (let [result ((wrap-grid-defaults identity) {:params {:fields ["a,broadcasts.b" "c,d" "broadcasts.e"]
+                                                        :sort "start"
+                                                        :start "start"
+                                                        :limit "15"}})]
+    (is (= (result :broadcasts-params) {:fields "b,e" :start "start"}))))

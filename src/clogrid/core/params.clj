@@ -17,7 +17,7 @@
 (defn- is-broadcasts-field? [field]
   (.contains field "broadcasts"))
 
-(defn- get-fields [fields selector]
+(defn- get-fields [selector fields]
   (->>
    (clojure.string/split fields #",")
    (selector)
@@ -31,15 +31,39 @@
 (defn- channels-fields-selector [fields]
   (filter (comp not is-broadcasts-field?) fields))
 
-(defn wrap-fields [handler fields-selector fields-name]
+(def broadcasts-params
+  {:fields (partial get-fields broadcasts-fields-selector)
+   :start identity
+   :end identity})
+
+(def channels-params
+  {:fields (partial get-fields channels-fields-selector)
+   :exclude (comp not #{:start :end})
+   :default identity})
+
+(defn get-params [params params-selector]
+  (reduce-kv (fn [res k v]
+               (if-let [f (params-selector k)]
+                 (conj res {k (f v)})
+                 res))
+             {}
+             params))
+
+(defn wrap-grid-params [handler params-selector params-name]
   (fn [request]
-    (if-let [fields (-> request :params :fields)]
-      (let [selected-fields (get-fields fields fields-selector)]
-        (handler (assoc request fields-name selected-fields)))
+    (if-let [params (request :params)]
+      (let [selected-params (get-params params params-selector)]
+        (handler (conj request {params-name selected-params})))
       (handler request))))
+
+(defn wrap-broadcasts-params [handler]
+  (wrap-grid-params handler broadcasts-params :broadcasts-params))
+
+(defn wrap-channels-params [handler]
+  (wrap-grid-params handler channels-params :channels-params))
 
 (defn wrap-grid-defaults [handler]
   (-> handler
-      (wrap-fields broadcasts-fields-selector :broadcasts-fields)
-      (wrap-fields channels-fields-selector :channels-fields)
+      wrap-broadcasts-params
+      wrap-channels-params
       wrap-flat-multiple-params))

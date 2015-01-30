@@ -1,0 +1,8 @@
+#!/bin/bash
+
+NAME=clogrid
+JAR_INSTALL_DIR=/var/local/clogrid
+INIT_SCRIPT_INSTALL_DIR=/etc/init.d
+
+rm -f $JAR_INSTALL_DIR/"$NAME"-standalone.jar
+rm -f $INIT_SCRIPT_INSTALL_DIR/"$NAME"d

@@ -22,14 +22,12 @@
 (defroutes app-routes
   (GET "/:region/grid.json" [region :as request]
        (json/write-str (grid/get-grid region
-                                      (request :params)
-                                      (request :broadcasts-fields)
-                                      (request :channels-fields))))
+                                      (request :broadcasts-params)
+                                      (request :channels-params))))
   (GET "/:region/:channel.json" [region channel :as request]
        (json/write-str (grid/get-grid region
-                                      (request :params)
-                                      (request :broadcasts-fields)
-                                      (request :channels-fields))))
+                                      (request :broadcasts-params)
+                                      (request :channels-params))))
   (route/not-found "Not Found"))
 
 (defn init []

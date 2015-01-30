@@ -25,38 +25,38 @@
                   c
                   {:broadcasts (grouped-broadcasts (:ref c))})) channels)))
 
-(defn- get-channels [region query-params fields]
+(defn- get-channels [region params]
   (error/attempt-all
-   [fields-with-ref (add-to-fields fields "ref")
+   [fields-with-ref (add-to-fields (params :fields) "ref")
     channels (schedule/get-channels
               region
-              (conj query-params
-                    {:fields fields-with-ref}
-                    {:limit 32000}))
-    channels]
+              (assoc params
+                     :fields fields-with-ref
+                     :limit 32000))]
+   channels
    (log-as :error)))
 
-(defn- get-broadcasts [region query-params fields]
+(defn- get-broadcasts [region params]
   (error/attempt-all
-   [fields-with-channel-ref (add-to-fields fields "channel.ref")
+   [fields-with-channel-ref (add-to-fields (params :fields) "channel.ref")
     broadcasts (schedule/get-broadcasts
                 region
                 {:fields fields-with-channel-ref
                  :limit 32000
-                 :start< (get query-params
+                 :start< (get params
                               :end
                               (str-date (t/plus (t/now) (t/hours 6))))
-                 :end> (get query-params
+                 :end> (get params
                             :start
                             (str-date (t/minus (t/now) (t/hours 1))))
                  :sort "start"})]
    broadcasts
    (log-as :error)))
 
-(defn get-grid [region query-params bcasts-fields channels-fields]
+(defn get-grid [region bcasts-params channels-params]
   (error/attempt-all
-   [channels (get-channels region query-params channels-fields)
-    broadcasts (get-broadcasts region query-params)
+   [channels (get-channels region channels-params)
+    broadcasts (get-broadcasts region bcasts-params)
     grid (merge-channels-with-broadcasts channels broadcasts)]
    grid
    (log-as :error (return-as 503))))
