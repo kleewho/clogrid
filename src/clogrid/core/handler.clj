@@ -26,7 +26,10 @@
                                       (request :broadcasts-fields)
                                       (request :channels-fields))))
   (GET "/:region/:channel.json" [region channel :as request]
-       (json/write-str (grid/get-grid region {} {} {})))
+       (json/write-str (grid/get-grid region
+                                      (request :params)
+                                      (request :broadcasts-fields)
+                                      (request :channels-fields))))
   (route/not-found "Not Found"))
 
 (defn init []
