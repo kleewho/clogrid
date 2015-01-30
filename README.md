@@ -36,13 +36,15 @@ To show all upsides and downsides we should show:
 Binding forms are in `[]`. Most commonly they can be found in function definitions
 as a list of function params or in special form `let`.
 
-* ```clojure
+ 
+```clojure
 (defn name [a] (print (str "Hello" a)))
 ```
 
 a is bound to value passed as a first arg
 
-* ```clojure
+
+```clojure
 (defn name [a]
   (let [msg (str "Hello" a)]
     (print msg)))
@@ -53,6 +55,7 @@ msg is bound to result of computing `(str "Hello" a)` and within let scope msg n
 ## Ring - web applications library
 
 First of all couple of not so long lectures:
+
 * [Ring concepts](https://github.com/ring-clojure/ring/wiki/Concepts)
 * [Introduction](http://drtom.ch/posts/2012-12-10/An_Introduction_to_Webprogramming_in_Clojure_-_Ring_and_Middleware/) - very interesting diagrams
 
