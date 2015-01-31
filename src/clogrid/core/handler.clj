@@ -26,8 +26,8 @@
                                       (request :channels-params))))
   (GET "/:region/:channel.json" [region channel :as request]
        (json/write-str (grid/get-grid region
-                                      (request :broadcasts-params)
-                                      (request :channels-params))))
+                                      (request :broadcasts-params {:channel.ref channel})
+                                      (conj (request :channels-params) {:ref channel}))))
   (route/not-found "Not Found"))
 
 (defn init []
