@@ -38,12 +38,19 @@
 
 (def channels-params
   {:fields (partial get-fields channels-fields-selector)
-   :exclude (comp not #{:start :end})
-   :default identity})
+   :_exclude #{:start :end :limit}
+   :_all identity})
+
+(defn selecting-function [params-selector key]
+  (if-let [f (params-selector key)]
+    f
+    (if ((set (params-selector :_exclude)) key)
+      nil
+      (params-selector :_all))))
 
 (defn get-params [params params-selector]
   (reduce-kv (fn [res k v]
-               (if-let [f (params-selector k)]
+               (if-let [f (selecting-function params-selector k)]
                  (conj res {k (f v)})
                  res))
              {}

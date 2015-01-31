@@ -28,7 +28,14 @@
   (testing "broadcasts params selector tested"
     (let [result (get-params {:fields "broadcasts.b,broadcasts.c,d,e"
                               :start "someDate"} broadcasts-params)]
-      (is (= result {:fields "b,c" :start "someDate"})))))
+      (is (= result {:fields "b,c" :start "someDate"}))))
+
+  (testing "channels params selector tested"
+    (let [result (get-params {:fields "broadcasts.b,broadcasts.c,d,e"
+                              :start "someDate"
+                              :limit "30"
+                              :ref "ref"} channels-params)]
+      (is (= result {:fields "d,e" :ref "ref"})))))
 
 (deftest test-middleware-is-in-correct-order
 
