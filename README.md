@@ -20,6 +20,13 @@ To show all upsides and downsides we should show:
 * how much different (worse) is work with clojure in IDEA
 * show exception/error handling
 
+### Endpoints
+
+We expose two endpoints:
+
+* `/:region/grid.json` - all channels with broadcasts in next 6h
+* `/:region/:channel.json` - channel with broadcasts in next 6h
+
 ## Clojure - few things for a start
 
 ### Defining things
