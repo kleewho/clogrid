@@ -10,6 +10,7 @@
                  [metrics-clojure-ring "2.4.0"]
                  [clj-http "1.0.1"]
                  [clj-time "0.9.0"]
+                 [environ "1.0.0"]
                  ;; [com.lgi.epg.api/customer-api-adapter-client "1.0"]
                  [org.clojure/data.json "0.2.5"]
                  [org.clojure/algo.monads "0.1.5"]

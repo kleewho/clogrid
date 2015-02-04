@@ -1,8 +1,9 @@
 (ns clogrid.schedule.client
   (:require [clj-http.client :as client]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [environ.core :refer [env]]))
 
-(def lgi-io "http://api.lgi.io/kraken/v2/schedule/data/")
+(def lgi-io (env :schedule-url "http://api.lgi.io/kraken/v2/schedule/data/"))
 (def channels-endpoint "/channels.json")
 (def broadcasts-endpoint "/broadcasts.json")
 
