@@ -1,4 +1,4 @@
-(ns clogrid.core.params-test
+(ns clogrid.middleware.params-test
   (:require [clogrid.core.params :refer :all]
             [clojure.test :refer :all]))
 

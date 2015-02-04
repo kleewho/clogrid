@@ -1,4 +1,4 @@
-(ns clogrid.core.params)
+(ns clogrid.middleware.params)
 
 (defn- flat-params [params]
   (reduce-kv (fn [res k v]

@@ -4,26 +4,20 @@
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [metrics.ring.expose :refer [expose-metrics-as-json]]
             [metrics.ring.instrument :refer [instrument]]
-            [metrics.reporters.graphite :as graphite]
             [clogrid.schedule.client :as schedule]
             [clogrid.core.grid :as grid]
-            [clogrid.core.params :refer [wrap-grid-defaults]]
+            [clogrid.middleware.params :refer [wrap-grid-defaults]]
+            [clogrid.metrics.graphite-reporter :as graphite-reporter]
             [clojure.data.json :as json]
-            [clojure.tools.logging :as log])
-  (:import (java.util.concurrent TimeUnit)
-           (com.codahale.metrics MetricFilter)))
-
-(def GR (graphite/reporter {:prefix "clogrid"
-                            :rate-unit TimeUnit/SECONDS
-                            :duration-unit TimeUnit/MILLISECONDS
-                            :filter MetricFilter/ALL}))
-;; (graphite/start GR 1)
+            [clojure.tools.logging :as log]))
 
 (defroutes app-routes
+
   (GET "/:region/grid.json" [region :as request]
        (json/write-str (grid/get-grid region
                                       (request :broadcasts-params)
                                       (request :channels-params))))
+
   (GET "/:region/:channel.json" [region channel :as request]
        (json/write-str (grid/get-grid region
                                       (conj (request :broadcasts-params)
@@ -33,6 +27,7 @@
   (route/not-found "Not Found"))
 
 (defn init []
+  (graphite-reporter/start)
   (log/info "
 Hi man.
 
