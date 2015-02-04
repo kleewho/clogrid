@@ -7,7 +7,15 @@
                                            (flatten (vector v)))))
              {} params))
 
-(defn wrap-flat-multiple-params [handler]
+(defn wrap-flat-multiple-params
+  "Wraps a handler in middleware that flattens all params
+
+  Given this query `?a=v1&a=v2`
+
+  instead of `[\"v1\" \"v2\"]` it will flatten it to single
+  comma separated string `\"v1,v2\"`
+  "
+  [handler]
   (fn [request]
     (if-let [params (request :params)]
       (let [flatten-params (flat-params params)]
@@ -56,7 +64,36 @@
              {}
              params))
 
-(defn wrap-grid-params [handler params-selector params-name]
+(defn wrap-grid-params
+  "Wraps a handler in middleware that will pick some
+  params as a separate group
+
+  Having this query `?a=prefix.v1,v2&b=v3&c=v4
+
+  And given this configuration
+
+  ```clojure
+  {:a select-not-prefixed
+   :_exclude #{:b}
+   :_all identity}
+  ```
+
+  It will add to the request as `params-name` this map:
+
+  ```clojure
+    {:params-name {:a \"v2\"
+                   :c \"v4\"}}
+  ```
+
+  Configuration is a map where key is a query param and value is
+  function which should be used when selecting this query param.
+  Additionally there are special keys:
+
+  * _exclude - for excluding completely some query-params
+  * _all - used if the query param isn't implicit included nor excluded
+
+  "
+  [handler params-selector params-name]
   (fn [request]
     (if-let [params (request :params)]
       (let [selected-params (get-params params params-selector)]

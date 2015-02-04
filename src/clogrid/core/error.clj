@@ -32,7 +32,29 @@
                                 m
                                 (try-apply f m)))])
 
+
 (defmacro attempt-all
+  "Attempts to evaluate all bindings forms. If one of them is failed
+  the rest aren't executed and the error is passed to the fail handler
+  called `else`. If none of the binding failed then `return` is
+  returned from attemp-all
+
+  Example usage:
+
+  ```clojure
+  (attempt-all [a (not-failing)
+                b (not-failing)]
+                b
+                (fn [failure] (log/error failuer))) ;;returns b
+  ```
+
+  ```clojure
+  (attempt-all [a (failing)
+                b (not-failing)] ;;this line won't be even called
+                b
+                (fn [failure] (log/error failure))) ;;logs failure
+  ```
+  "
   ([bindings return] `(domonad error-m ~bindings ~return))
   ([bindings return else]
      `(let [result# (attempt-all ~bindings ~return)]

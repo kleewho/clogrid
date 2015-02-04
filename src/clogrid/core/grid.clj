@@ -16,9 +16,6 @@
     field
     (clojure.string/join "," (conj (set (clojure.string/split fields #",")) field))))
 
-(defn- retrieve-refs [channels]
-  (clojure.string/join "," (map (fn [c] (c :ref)) channels)))
-
 (defn- merge-channels-with-broadcasts [channels broadcasts]
   (let [grouped-broadcasts (group-by (fn [b] (:ref (:channel b))) broadcasts)]
     (map (fn [c] (conj
@@ -53,7 +50,11 @@
    broadcasts
    (log-as :error)))
 
-(defn get-grid [region bcasts-params channels-params]
+(defn get-grid
+  "Fetches channels and broadcasts in specified time range
+  and embeds broadcasts into channels. To join them channel.ref is used.
+  "
+  [region bcasts-params channels-params]
   (error/attempt-all
    [channels (get-channels region channels-params)
     broadcasts (get-broadcasts region bcasts-params)
