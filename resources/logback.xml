@@ -26,6 +26,7 @@
 
 
   <logger name="clojure-example-logback-integration" level="DEBUG"/>
+  <logger name="com.codahale.metrics" level="OFF" />
 
   <root level="INFO">
     <appender-ref ref="CONSOLE"/>
